@@ -1,0 +1,5 @@
+#Remove compiled python files
+*.pyc
+
+#Remove log files
+*.log
