@@ -1,16 +1,31 @@
-#Class for handling all interaction with the motor
+#Class for handling all interaction with a motor
 import Settings
+import LinearActuator
 
 class Motor:
+
+	motor = 0;
+
+	#Intialize the motor using the one specified in Settings.py file
 	def __init__(self):
+		if(Settings.MOTOR == "LINEAR"):
+			if(Settings.DEBUG):
+				print("Setting up LinearActuator as motor")
+			self.motor = LinearActuator.LinearActuator()
+		else:
+			print("ERROR(Motor.Motor:1): Could not find specified motor type!")
 		if(Settings.DEBUG):
 			print("Motor class intialized!")
-	
-	def step_motor(self, steps):
-		if(not isinstance(steps,int)):
-			print("ERROR(Motor.step_motor:1): Wrong type of argument supplied!")
+
+	#Method used to move the motor a set distance (mm) and direction
+	#When direction = 0 the motor will extend, when direction = 1 the motor will retract
+	def run_motor(self, distance, dir):
+		if(not isinstance(distance,int) or not isinstance(dir, int)):
+			print("ERROR(Motor.run_motor:1): Wrong type of argument supplied!")
 			quit()
 		else:
-			if(Settings.DEBUG):
-				print("Stepped motor " + str(steps) + " steps")
+			if(Settings.MOTOR == "LINEAR"):
+				self.motor.run_motor(distance, dir)
+			else:
+				print("ERROR(Motor.run_motor:2): Could not find specified motor type!")
 

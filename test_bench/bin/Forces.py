@@ -5,6 +5,7 @@ import csv
 
 class Forces:
 
+	#List used to store all the loaded force target values
 	force_values = []
 	index = 0
 
@@ -15,7 +16,7 @@ class Forces:
                 file = open(path_to_file,'r')
 		csvrd = csv.reader(file, delimiter = ',')
 		for ln in csvrd:
-			for item in ln: 
+			for item in ln:
                 		self.force_values.append(item)
 
 		if(len(self.force_values) <= 0):
@@ -37,31 +38,28 @@ class Forces:
 			if(self.index < length):
 				self.index += 1
 				if(Settings.DEBUG):
-    		                	print("Fetched the next force value: " + str(self.force_values[self.index]))
-				return self.force_values[self.index - 1]
+    		                	print("Fetched the next force value: " + str(self.force_values[self.index - 1]))
+				return int(self.force_values[self.index - 1])
 			else:
 				self.index = 0
 				if(Settings.DEBUG):
                                 	print("Fetched the next force value: " + str(self.force_values[self.index]))
-				return self.force_values[self.index]
+				return int(self.force_values[self.index])
 
 	def __init__(self):
 		if(Settings.DEBUG):
 			print("Forces class intialized!")
-		index = 0
+
 	#Method used to load force values from a specified file
 	def load_forces(self, path_to_file):
 		if(not isinstance(path_to_file, str)):
 			print("ERROR(Forces.load_forces:1): Wrong type of argument supplied!")
 			quit()
 		else:
+			#Check if the path to the supplied file exists
 			if(os.path.exists(path_to_file)):
 				if(Settings.DEBUG):
 					print("Found file!")
-				else:
-					print("ERROR(Forces.load_forces:2): Could not find the file path!")
-					quit()
-
 				#Determine the correct file loader to use
 				if(os.path.splitext(path_to_file)[1] == ".csv"):
 					self.load_csv(path_to_file)
@@ -73,3 +71,6 @@ class Forces:
 
 				if(Settings.DEBUG):
 					print("Lodaded " + str(len(self.force_values)) + " force values from file: " + path_to_file)
+			else:
+                                print("ERROR(Forces.load_forces:2): Could not find the file path!")
+                                quit()
