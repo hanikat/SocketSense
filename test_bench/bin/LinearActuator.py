@@ -16,10 +16,8 @@ class LinearActuator:
 	frequency = 20000
 	duty_cycle = 100
 	#Number of seconds to run per mm of movement
-	s_mm = 1/25.4
-
-	#Maximum length of linear actuator (mm)
-	la_length = 304
+	s_mm = 1/34.46
+	retract_correction = 0.9261
 
 	def __init__(self):
 		if(Settings.DEBUG):
@@ -42,11 +40,17 @@ class LinearActuator:
 		GPIO.output(self.pin_dir, dir)
 
 		#Run motor for set amount of time equal to "distance" mm
-		if(distance > self.la_length or distance <= 0):
+		if(distance > Settings.MAX_POS or distance <= 0):
 			print("ERROR(LinearActuator.run_motor:2): Invalid movement distance supplied as argument: " + str(distance))
+		if(dir == 1):
+			distance = (distance / self.retract_correction);
 		self.pwm.start(self.duty_cycle)
 		time.sleep(distance * self.s_mm)
 		self.pwm.stop()
 
 		if(Settings.DEBUG):
 			print("Motor was moved " + str(distance) + " mm")
+
+	#Reset motor position to 0
+	def reset_pos(self):
+		self.run_motor(Settings.MAX_POS, 1)

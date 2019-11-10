@@ -1,0 +1,6 @@
+import argparse
+
+parser = argparse.ArgumentParser(description='Move motor a set distance and direction.')
+parser.add_argument('--dist', action="store", dest="distance", type=int, help='Distance to move the motor')
+parser.add_argument('--dir', action="store", dest="direciton", type=int, help='Direction to move the motor, 1 is retract, 0 is extendrgs = parser.parse_args()
+print "Distance: " + str(options.distance) + ", Direction: " + str(options.direction)

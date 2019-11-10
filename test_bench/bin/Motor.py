@@ -4,7 +4,8 @@ import LinearActuator
 
 class Motor:
 
-	motor = 0;
+	motor = 0
+	position = Settings.START_POS
 
 	#Intialize the motor using the one specified in Settings.py file
 	def __init__(self):
@@ -20,7 +21,7 @@ class Motor:
 	#Method used to move the motor a set distance (mm) and direction
 	#When direction = 0 the motor will extend, when direction = 1 the motor will retract
 	def run_motor(self, distance, dir):
-		if(not isinstance(distance,int) or not isinstance(dir, int)):
+		if(not isinstance(distance,float) or not isinstance(dir, int)):
 			print("ERROR(Motor.run_motor:1): Wrong type of argument supplied!")
 			quit()
 		else:
@@ -29,3 +30,9 @@ class Motor:
 			else:
 				print("ERROR(Motor.run_motor:2): Could not find specified motor type!")
 
+	#Reset motor position to Settings.START_POS value
+	def reset_pos(self):
+		self.motor.reset_pos()
+		self.motor.run_motor(self.position, 0)
+		if(Settings.DEBUG):
+			print("Motor position was reset to: " + str(self.position))

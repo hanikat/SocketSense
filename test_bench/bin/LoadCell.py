@@ -5,7 +5,7 @@ class LoadCell:
 
 	#Force values which are currently only used for testing
 	#The real force values should be extracted from the load cell when implemented
-	forces = [100, 200, 300, 400, 500, 450, 400, 300, 200]
+	forces = [100, 200, 300, 400, 500, 400, 300, 200]
 	index = 0
 
 	#Method to get the next force value within the list
@@ -22,7 +22,7 @@ class LoadCell:
                                         print("Current force value: " + str(self.forces[self.index - 1]))
                                 return int(self.forces[self.index - 1])
                         else:
-                                self.index = 0
+                                self.index = 1
                                 if(Settings.DEBUG):
-                                        print("Current force value: " + str(self.forces[self.index]))
-                                return int(self.forces[self.index])
+                                        print("Current force value: " + str(self.forces[0]))
+                                return int(self.forces[0])

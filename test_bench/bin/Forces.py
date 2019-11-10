@@ -41,10 +41,10 @@ class Forces:
     		                	print("Fetched the next force value: " + str(self.force_values[self.index - 1]))
 				return int(self.force_values[self.index - 1])
 			else:
-				self.index = 0
+				self.index = 1
 				if(Settings.DEBUG):
-                                	print("Fetched the next force value: " + str(self.force_values[self.index]))
-				return int(self.force_values[self.index])
+                                	print("Fetched the next force value: " + str(self.force_values[0]))
+				return int(self.force_values[0])
 
 	def __init__(self):
 		if(Settings.DEBUG):
