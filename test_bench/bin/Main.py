@@ -40,9 +40,9 @@ while(True):
 				#Targeted force is smaller and we are retracting LA
 				if(curMovement + Settings.STEP_SIZE >= Settings.MAX_MOV):
                                         print("ERROR(Main:3): The maximum movement length of the motor was reached!")
-                                else:
+				else:
                                         #Maximum movement range have not yet been reached
-                                        curMovement += Settings.STEP_SIZE
+					curMovement += Settings.STEP_SIZE
 					mot.run_motor(Settings.STEP_SIZE, direction)
 			else:
 				#The LA was moved to a position where the targeted force was met and surpased, get next force value

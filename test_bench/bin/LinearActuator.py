@@ -5,9 +5,6 @@ import time
 
 class LinearActuator:
 
-	#Pin mapping
-	pin_dir = 23
-	pin_pwm = 18
 	#Variable used for PWM control
 	pwm = 0
 
@@ -26,9 +23,9 @@ class LinearActuator:
 		#Intialize GPIO for LinearActuator control
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setwarnings(False)
-		GPIO.setup(self.pin_dir, GPIO.OUT)
-		GPIO.setup(self.pin_pwm, GPIO.OUT)
-		self.pwm = GPIO.PWM(self.pin_pwm, self.frequency)
+		GPIO.setup(Settings.MOTOR_DIR_PIN, GPIO.OUT)
+		GPIO.setup(Settings.MOTOR_PWM_PIN, GPIO.OUT)
+		self.pwm = GPIO.PWM(Settings.MOTOR_PWM_PIN, self.frequency)
 
 	#Method used to move motor "distance" number of mm
 	#dir is used to controll the direction of the linear actuator, 0 = extend, 1 = retract
@@ -37,7 +34,7 @@ class LinearActuator:
 		if(dir > 1 or dir < 0):
 			print("ERROR(LinearActuator.run_motor:1): Invalid direction supplied as argument: " + str(dir))
 			quit()
-		GPIO.output(self.pin_dir, dir)
+		GPIO.output(Settings.MOTOR_DIR_PIN, dir)
 
 		#Run motor for set amount of time equal to "distance" mm
 		if(distance > Settings.MAX_POS or distance <= 0):

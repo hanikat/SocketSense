@@ -10,10 +10,10 @@ class Forces:
 	index = 0
 
 	#Method used to load CSV-files into the force_values variable
-        def load_csv(self, path_to_file):
-                if(Settings.DEBUG):
-                        print("load_csv invoked, reading CSV from file")
-                file = open(path_to_file,'r')
+	def load_csv(self, path_to_file):
+		if(Settings.DEBUG):
+			print("load_csv invoked, reading CSV from file")
+		file = open(path_to_file,'r')
 		csvrd = csv.reader(file, delimiter = ',')
 		for ln in csvrd:
 			for item in ln:
@@ -24,9 +24,9 @@ class Forces:
 			quit()
 
         #Method used to load data from txt file into the force_values variable
-        def load_txt(self, path_to_file):
-                if(Settings.DEBUG):
-                        print("load_txt invoked, reading input from text file")
+	def load_txt(self, path_to_file):
+		if(Settings.DEBUG):
+			print("load_txt invoked, reading input from text file")
 	#Method to get the next force value within the list
 	def getNextForce(self):
 		length = len(self.force_values)
