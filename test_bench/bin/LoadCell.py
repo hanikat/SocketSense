@@ -11,8 +11,9 @@ class LoadCell:
 	hx711 = 0
 
 	def __init__(self):
-		self.hx711 = HX711(dout_pin=Settings.LC_DOUT_PIN, pd_sck_pin=Settings.LC_PD_SCK_PIN, channel=Settings.LC_CHANNEL, gain=Settings.LC_GAIN)
-		#self.hx711.reset()
+		self.hx711 = HX711(dout_pin=Settings.LC_DOUT_PIN, pd_sck_pin=Settings.LC_PD_SCK_PIN, select_channel=Settings.LC_CHANNEL, gain_channel_A=Settings.LC_GAIN)
+		self.hx711.reset()
+		self.hx711.zero(readings=99)
 
 	#Method to get the next force value within the list
 	def getNextForce(self):
@@ -35,4 +36,4 @@ class LoadCell:
 
 
 	def getMeasurement(self):
-		return self.hx711.get_raw_data_mean(num_measures=1)
+		return (self.hx711.get_data_mean(readings=Settings.LC_READINGS_PER_MEASSUREMENT)/Settings.LC_N_RATIO)

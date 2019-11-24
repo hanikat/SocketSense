@@ -14,7 +14,7 @@ class LinearActuator:
 	duty_cycle = 100
 	#Number of seconds to run per mm of movement
 	s_mm = 1/34.46
-	retract_correction = 0.9261
+	retract_correction = 0.9271
 
 	def __init__(self):
 		if(Settings.DEBUG):

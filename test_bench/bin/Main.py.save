@@ -17,7 +17,6 @@ direction = 0
 mot.reset_pos()
 curMovement = 0
 
-
 while(True):
 
 	#Extract the current force applied from the load cell
@@ -31,7 +30,7 @@ while(True):
 			#direction = 0 extends the LA, direction = 1 retracts LA
 			if(force > curForce and direction == 0):
 				#Targeted force is bigger and we are extending LA
-				if(curMovement + Settings.STEP_SIZE >= Settings.MAX_MOV):
+				if(curMove):
 					print("ERROR(Main:3): The maximum movement length of the motor was reached!")
 					quit()
 				else:
@@ -40,9 +39,12 @@ while(True):
 					mot.run_motor(Settings.STEP_SIZE, direction)
 			elif(force <= curForce and direction == 1):
 				#Targeted force is smaller and we are retracting LA
-                                #Maximum movement range have not yet been reached
-				curMovement -= Settings.STEP_SIZE
-				mot.run_motor(Settings.STEP_SIZE, direction)
+				if(curMovement + Settings.STEP_SIZE >= Settings.MAX_MOV):
+                                        print("ERROR(Main:3): The maximum movement length of the motor was reached!")
+				else:
+                                        #Maximum movement range have not yet been reached
+					curMovement += Settings.STEP_SIZE
+					mot.run_motor(Settings.STEP_SIZE, direction)
 			else:
 				#The LA was moved to a position where the targeted force was met and surpased, get next force value
 				force = forces.getNextForce()
