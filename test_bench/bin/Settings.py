@@ -1,6 +1,6 @@
 # ----- COMMON -----
 #Root directory
-ROOT_DIR = "/home/pi/Scripts/test_bench"
+ROOT_DIR = "/home/pi/Desktop/SocketSense/test_bench"
 
 #Defines if debug is enabled
 DEBUG = True
@@ -22,13 +22,13 @@ MAX_FORCE = 1000
 MOTOR = 'LINEAR'
 
 #Define start position of motor (mm)
-START_POS = 100
+START_POS = 50
 #Define maximum position of motor (mm)
-MAX_POS = 315
+MAX_POS = 150
 #Define maximum movement range in one force value (mm)
 MAX_MOV = 20
 #Define the step size in mm
-STEP_SIZE = 0.5
+STEP_SIZE = 1
 
 
 # ----- PIN PLACEMENT -----
@@ -46,4 +46,4 @@ MOTOR_PWM_PIN = 18
 LC_CHANNEL = 'A'
 LC_GAIN = 64
 LC_N_RATIO = -735.23
-LC_READINGS_PER_MEASSUREMENT = 3
+LC_READINGS_PER_MEASSUREMENT = int(1)

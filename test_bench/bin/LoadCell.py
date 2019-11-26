@@ -36,4 +36,4 @@ class LoadCell:
 
 
 	def getMeasurement(self):
-		return (self.hx711.get_data_mean(readings=Settings.LC_READINGS_PER_MEASSUREMENT)/Settings.LC_N_RATIO)
+		return ((self.hx711.get_data_mean(readings=Settings.LC_READINGS_PER_MEASSUREMENT)/Settings.LC_N_RATIO))

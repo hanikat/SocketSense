@@ -21,7 +21,7 @@ class Motor:
 	#Method used to move the motor a set distance (mm) and direction
 	#When direction = 0 the motor will extend, when direction = 1 the motor will retract
 	def run_motor(self, distance, dir):
-		if(not isinstance(distance,float) or not isinstance(dir, int)):
+		if(not isinstance(float(distance),float) or not isinstance(dir, int)):
 			print("ERROR(Motor.run_motor:1): Wrong type of argument supplied!")
 			quit()
 		else:

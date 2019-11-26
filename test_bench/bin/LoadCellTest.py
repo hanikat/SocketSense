@@ -7,7 +7,7 @@ lc = LoadCell.LoadCell()
 start_time = time.time()
 meassurements = 0
 sum = 0
-n = 20000
+n = 1000
 
 input("Load cell has been zeroed, place weight on load cell and press enter to coninue... ")
 meas = lc.getMeasurement()

@@ -11,7 +11,7 @@ def ctrl_c_handler(sig, frame):
         print("Aborting program execution! Cleaning up GPIO pins...")
         GPIO.setmode(GPIO.BCM)
         for x in range(40):
-                #print("Clearing GPIO-pin nr: " + str(x))
+		print("Clearing GPIO-pin nr: " + str(x))
                 GPIO.setup(x, GPIO.OUT)
                 GPIO.output(x, GPIO.LOW)
         GPIO.cleanup()

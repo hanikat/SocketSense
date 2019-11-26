@@ -57,6 +57,7 @@ class HX711:
         self._debug_mode = False
         self._data_filter = outliers_filter  # default it is used outliers_filter
 
+        #GPIO.cleanup()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self._pd_sck, GPIO.OUT)  # pin _pd_sck is output only
         GPIO.setup(self._dout, GPIO.IN)  # pin _dout is input only
@@ -355,7 +356,7 @@ class HX711:
         GPIO.output(self._pd_sck, False)  # start by setting the pd_sck to 0
         ready_counter = 0
         while (not self._ready() and ready_counter <= 40):
-            time.sleep(0.01)  # sleep for 10 ms because data is not ready
+            time.sleep(0.02)  # sleep for 10 ms because data is not ready
             ready_counter += 1
             if ready_counter == 50:  # if counter reached max value then return False
                 if self._debug_mode:
