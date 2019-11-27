@@ -26,13 +26,13 @@ forces.load_forces(Settings.FORCE_VALUE_FILE)
 mot = Motor.Motor()
 lc = LoadCell.LoadCell()
 
-#Get the first target force and set the direction
-force = forces.getNextForce()
-direction = 0
-
 mot.reset_pos()
 curMovement = 0
 startTime = time.time()
+
+#Get the first target force and set the direction
+force = forces.getNextForce()
+direction = 0
 
 while(True):
 
