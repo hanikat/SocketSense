@@ -32,6 +32,7 @@ direction = 0
 
 mot.reset_pos()
 curMovement = 0
+startTime = time.time()
 
 while(True):
 
@@ -63,7 +64,15 @@ while(True):
 				#The LA was moved to a position where the targeted force was met and surpased, get next force value
 				force = forces.getNextForce()
 				curMovement = 0
+				#Allow motor to stop before changing drection
 				time.sleep(1/8)
+				
+				#Sleep motor if duty cycle threshold have been reached
+				if(time.time() - startTime >= Settings.MOTORDUTY_CYCLE_TIME):
+					startTime = time.time()
+					time.sleep(Settings.MOTOR_DUTY_CYCLE_TIME/Settings.MOTOR_DUTY_CYCLE)
+					
+				#Set new direciton of motor	
 				if(force > curForce):
 					direction = 0
 				else:
