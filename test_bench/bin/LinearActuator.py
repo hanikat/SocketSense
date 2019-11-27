@@ -23,8 +23,11 @@ class LinearActuator:
 		#Intialize GPIO for LinearActuator control
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setwarnings(False)
-		GPIO.setup(Settings.MOTOR_DIR_PIN, GPIO.OUT)
-		GPIO.setup(Settings.MOTOR_PWM_PIN, GPIO.OUT)
+		GPIO.setup(Settings.MOTOR_IN_1, GPIO.OUT)
+		GPIO.setup(Settings.MOTOR_IN_2, GPIO.OUT)
+		GPIO.setup(Settings.MOTOR_EN_PIN, GPIO.OUT)
+		#Disable motor until we need to use it
+		GPIO.output(Settings.MOTOR_EN_PIN, False)
 
 	#Method used to move motor "distance" number of mm
 	#dir is used to controll the direction of the linear actuator, 0 = extend, 1 = retract
@@ -39,12 +42,20 @@ class LinearActuator:
 			print("ERROR(LinearActuator.run_motor:2): Invalid movement distance supplied as argument: " + str(distance))
 		if(dir == 1):
 			distance = (distance / self.retract_correction);
-		GPIO.output(Settings.MOTOR_DIR_PIN, dir)
-		GPIO.output(Settings.MOTOR_PWM_PIN, not dir)
+		
+		#Enable motor and start moving it
+		GPIO.output(Settings.MOTOR_EN_PIN, True)
+		GPIO.output(Settings.MOTOR_IN_1, dir)
+		GPIO.output(Settings.MOTOR_IN_2, not dir)
+		
+		#Wait until motor has moved the given distance
 		time.sleep(distance * self.s_mm)
-		GPIO.output(Settings.MOTOR_DIR_PIN, 0)
-		GPIO.output(Settings.MOTOR_PWM_PIN, 0)
-
+		
+		#Disable motor and stop moving it
+		GPIO.output(Settings.MOTOR_IN_1, 0)
+		GPIO.output(Settings.MOTOR_IN_2, 0)
+		GPIO.output(Settings.MOTOR_EN_PIN, False)
+		
 		if(Settings.DEBUG):
 			print("Motor was moved " + str(distance) + " mm")
 
