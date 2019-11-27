@@ -11,7 +11,9 @@ class LoadCell:
 	hx711 = 0
 
 	def __init__(self):
+		#Setup and initialize load cell amplifier hx711
 		self.hx711 = HX711(dout_pin=Settings.LC_DOUT_PIN, pd_sck_pin=Settings.LC_PD_SCK_PIN, select_channel=Settings.LC_CHANNEL, gain_channel_A=Settings.LC_GAIN)
+		#Reset and zero(tare) the loadcell output
 		self.hx711.reset()
 		self.hx711.zero(readings=99)
 
