@@ -26,7 +26,17 @@ This class is used to request and read data from load cells used in the test ben
 This class was taken from the GitHub repository of gandalf15: https://github.com/gandalf15/HX711
 The code supplied in this repository have been slighlty modified to clear out some bugs and to better fit our needs.
 
-## 
+## Forces.py
+This class is used to load values from a file with a given format. Currently only CSV files are supported. The file path can be configured in the Settings.py file. The next target force can be loaded from this class once the file have been succesfully loaded.
+
+## LoadCellTest.py
+A script used to create an instance of the load cell and record meassurements from it. The statistics of the meassurements will be printed at the end of the script.
+
+## MoveMotor.py
+A script which takes two arguments: --dir (int) and --dist (float). The direction can be either 1 (retract) or 0 (extend) and the distance is a float value greater than 0. The script will move the motor a set number of mm in the given direction.
+
+## GPIO-cleanup.py
+This script clears all the GPIO pins and makes sure that they are on the low state.
 
 # Script for sending mail with IPs
 To set up the script which sends a mail at each boot of the raspbery Pi containing the IP-addresses of the unit the following line needs to be added into the file opened when running the command "sudo crontab -e":
