@@ -29,7 +29,10 @@ MAX_POS = 150
 MAX_MOV = 20
 #Define the step size in mm
 STEP_SIZE = 1
-
+#Define for how long the motor should run in one go (seconds)
+MOTOR_DUTY_CYCLE_TIME = 20
+#Define the duty cycle of the motor (percentage (float), 0-1)
+MOTOR_DUTY_CYCLE = 0.25
 
 # ----- PIN PLACEMENT -----
 #Using GPIO.BCM outlay
