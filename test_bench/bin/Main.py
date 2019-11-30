@@ -5,6 +5,27 @@ import LoadCell
 import time
 import signal
 import RPi.GPIO as GPIO
+from queue import Queue
+from threading import Thread
+
+#Define method used for LoadCell reading thread
+def loadCell_loop(out_queue, term_sig):
+	#Initalize LoadCell class
+	lc = LoadCell.LoadCell()
+	while(True):
+		if(term_sig.empty()):
+			out_queue.put(lc.getMeasurement())
+		else:
+			break
+
+#Class intilization
+forces = Forces.Forces()
+forces.load_forces(Settings.FORCE_VALUE_FILE)
+mot = Motor.Motor()
+queue = Queue()
+sig = Queue()
+_sentinel = object()
+t1 = Thread(target = LoadCell_loop, args=(queue, sig, ))
 
 #Define controller for ctrl-c input
 def ctrl_c_handler(sig, frame):
@@ -16,15 +37,10 @@ def ctrl_c_handler(sig, frame):
                 GPIO.output(x, GPIO.LOW)
         GPIO.cleanup()
         print("Clean up done! Terminating...")
+		sig.put(_sentinel)
         quit()
 
 signal.signal(signal.SIGINT, ctrl_c_handler)
-
-#Class intilization
-forces = Forces.Forces()
-forces.load_forces(Settings.FORCE_VALUE_FILE)
-mot = Motor.Motor()
-lc = LoadCell.LoadCell()
 
 mot.reset_pos()
 curMovement = 0
@@ -33,12 +49,19 @@ startTime = time.time()
 #Get the first target force and set the direction
 force = forces.getNextForce()
 direction = 0
+lastForce = 0
 
 while(True):
+	#Check if queue is empty, if that is the case use the previously fetched force value
+	if(not queue.empty()):
+		#Extract the current force applied from the load cell
+		curForce = queue.get()
+	else:
+		curForce = lastForce
 
-	#Extract the current force applied from the load cell
-	curForce = lc.getMeasurement()
-	#print("Current force applied: " + str(curForce))
+	#Set lastForce to be equivalent to the current force, to be used in the next loop
+	lastForce = curForce
+
 	if(isinstance(curForce, float) and isinstance(force, int)):
 
 		#Check if the force exceeds maximum allowed value
@@ -66,13 +89,13 @@ while(True):
 				curMovement = 0
 				#Allow motor to stop before changing drection
 				time.sleep(1/8)
-				
+
 				#Sleep motor if duty cycle threshold have been reached
 				if(time.time() - startTime >= Settings.MOTORDUTY_CYCLE_TIME):
 					startTime = time.time()
 					time.sleep(Settings.MOTOR_DUTY_CYCLE_TIME/Settings.MOTOR_DUTY_CYCLE)
-					
-				#Set new direciton of motor	
+
+				#Set new direciton of motor
 				if(force > curForce):
 					direction = 0
 				else:
