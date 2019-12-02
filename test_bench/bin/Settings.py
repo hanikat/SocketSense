@@ -1,6 +1,6 @@
 # ----- COMMON -----
 #Root directory
-ROOT_DIR = "/home/pi/Desktop/SocketSense/test_bench"
+ROOT_DIR = "/home/pi/SocketSense/test_bench"
 
 #Defines if debug is enabled
 DEBUG = True

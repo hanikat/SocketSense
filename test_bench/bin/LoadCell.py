@@ -1,7 +1,9 @@
+
 #Class for fetching and providing force values from a load cell
 import Settings
 from hx711 import HX711
 import os
+import signal
 
 class LoadCell:
 
@@ -10,9 +12,9 @@ class LoadCell:
 	forces = [100, 200, 300, 400, 500, 400, 300, 200]
 	index = 0
 	hx711 = 0
-	lastMeas = 0
+	lastMeas = 0.0
 	errorCount = 0
-	pid = p.pid
+	pid = os.getpid()
 
 	def __init__(self):
 		#Setup and initialize load cell amplifier hx711
@@ -44,22 +46,23 @@ class LoadCell:
 	def getMeasurement(self):
 		#Get current meassurement from load cell
 		curMeas = (self.hx711.get_data_mean(readings=Settings.LC_READINGS_PER_MEASSUREMENT)/Settings.LC_N_RATIO)
+		print("CurMeas: " + str(curMeas))
 
 		#Check if the values of the current meassurement are valid and within range, stop the program if errorCount is exceeded
-		if(curMeas == 0 and self.errorCount < Settings.ALLOWED_ERROR_COUNT):
+		if(float(curMeas) == float(0) and self.errorCount < Settings.ALLOWED_ERROR_COUNT):
 			#Current meassurement is zero, increment error count
 			self.errorCount	+= 1
-			return (self.lastMeas)
-		elif((curMeas - self.lastMeas > Settings.ALLOWED_FORCE_DIF or curMeas - self.lastMeas > 0 - Settings.ALLOWED_FORCE_DIF) and self.errorCount < Settings.ALLOWED_ERROR_COUNT):
+			return float(self.lastMeas)
+		elif((float(curMeas - self.lastMeas) > float(Settings.ALLOWED_FORCE_DIF) or float(curMeas - self.lastMeas) > float(0) - float(Settings.ALLOWED_FORCE_DIF)) and self.errorCount < Settings.ALLOWED_ERROR_COUNT):
 			#Current meassurement is out of range, increment error count
 			self.errorCount += 1
-			return (self.lastMeas)
+			return float(self.lastMeas)
 		elif(self.errorCount >= Settings.ALLOWED_ERROR_COUNT):
 			#Error count threshold have been reached, terminate program
-			os.kill(self.pid, signal.SIGINT)
-			return (-1)
+			#os.kill(self.pid, signal.SIGINT)
+			return float(-1)
 		else:
 			#Normal meassurement was recorded, reset errorCount
 			self.errorCount = 0
 			self.lastMeas = curMeas
-			return (curMeas)
+			return float(curMeas)

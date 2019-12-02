@@ -10,6 +10,7 @@ from threading import Thread
 
 #Define method used for LoadCell reading thread
 def loadCell_loop(out_queue, term_sig):
+
 	#Initalize LoadCell class
 	lc = LoadCell.LoadCell()
 	while(True):
@@ -25,8 +26,8 @@ mot = Motor.Motor()
 queue = Queue()
 sig = Queue()
 _sentinel = object()
-t1 = Thread(target = LoadCell_loop, args=(queue, sig, ))
-
+t1 = Thread(target = loadCell_loop, args=(queue, sig, ))
+t1.start()
 #Define controller for ctrl-c input
 def ctrl_c_handler(sig, frame):
         print("Aborting program execution! Cleaning up GPIO pins...")
@@ -37,7 +38,7 @@ def ctrl_c_handler(sig, frame):
                 GPIO.output(x, GPIO.LOW)
         GPIO.cleanup()
         print("Clean up done! Terminating...")
-		sig.put(_sentinel)
+        sig.put(_sentinel)
         quit()
 
 signal.signal(signal.SIGINT, ctrl_c_handler)
@@ -49,9 +50,14 @@ startTime = time.time()
 #Get the first target force and set the direction
 force = forces.getNextForce()
 direction = 0
-lastForce = 0
+lastForce = 0.0
 
 while(True):
+
+	if(not t1.isAlive()):
+		print("ERROR(Main:4): The load cell thread has died, exiting program!")
+		ctrl_c_handler(sig, 0)
+
 	#Check if queue is empty, if that is the case use the previously fetched force value
 	if(not queue.empty()):
 		#Extract the current force applied from the load cell
@@ -61,6 +67,8 @@ while(True):
 
 	#Set lastForce to be equivalent to the current force, to be used in the next loop
 	lastForce = curForce
+	if(Settings.DEBUG):
+		print("Current force value is: " + str(curForce))
 
 	if(isinstance(curForce, float) and isinstance(force, int)):
 
@@ -72,7 +80,7 @@ while(True):
 			if(force > curForce and direction == 0):
 				#Targeted force is bigger and we are extending LA
 				if(curMovement + Settings.STEP_SIZE >= Settings.MAX_MOV):
-					print("ERROR(Main:3): The maximum movement length of the motor was reached!")
+					print("ERROR(Main:3): The maximum movement length of the motor was reached!") 
 					quit()
 				else:
 					#Maximum movement range have not yet been reached
@@ -107,4 +115,6 @@ while(True):
 			quit()
 	else:
 		print("ERROR(Main:2): The force returned was not an integer value! " + str(force) + ", " + str(curForce))
+		if(not isinstance(curForce, float)):
+			print("Jupp")
 		quit()
