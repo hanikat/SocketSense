@@ -1,3 +1,4 @@
+import RPi.GPIO as GPIO
 # ----- COMMON -----
 #Root directory
 ROOT_DIR = "/home/pi/SocketSense/test_bench"
@@ -53,3 +54,18 @@ LC_N_RATIO = -735.23
 LC_READINGS_PER_MEASSUREMENT = int(1)
 ALLOWED_ERROR_COUNT = 3
 ALLOWED_FORCE_DIF = 100
+
+# ----- FUNCITONS -----
+
+def clear_gpio():
+	GPIO.setmode(GPIO.BCM)
+  for x in range(40):
+          #print("Clearing GPIO-pin nr: " + str(x))
+          GPIO.setup(x, GPIO.OUT)
+          GPIO.output(x, GPIO.LOW)
+  GPIO.cleanup()
+
+def quit_prog():
+  clear_gpio()
+	time.sleep(2)
+	quit()
