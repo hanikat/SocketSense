@@ -38,7 +38,7 @@ class LinearActuator:
 		#Set the direction to run the linear actuator in
 		if(dir > 1 or dir < 0):
 			print("ERROR(LinearActuator.run_motor:1): Invalid direction supplied as argument: " + str(dir))
-			quit()
+			Settings.quit_prog()
 
 		#Run motor for set amount of time equal to "distance" mm
 		if(distance > Settings.MAX_POS or distance <= 0):
