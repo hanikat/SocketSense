@@ -28,7 +28,7 @@ class LoadCell:
 		length = len(self.forces)
 		if(length == 0):
 			print("ERROR(Forces.getNextForce:1): No force values have been loaded!")
-			quit()
+			Settings.quit_prog()
 		else:
                         #Check if we reached the end of the lists containing the force values, restart if that is the case
                         if(self.index < length):
