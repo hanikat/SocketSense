@@ -33,24 +33,25 @@ _sentinel = object()
 t1 = Thread(target = loadCell_loop, args=(queue, sig, ))
 t1.start()
 
-def quit_prog():
-	sig.put("WHATEVER")
-	time.sleep(1)
-	quit()
-
-
-#Define controller for ctrl-c input
-def ctrl_c_handler(sig, frame):
-        print("Aborting program execution! Cleaning up GPIO pins...")
-        GPIO.setmode(GPIO.BCM)
+def clear_gpio():
+	GPIO.setmode(GPIO.BCM)
         for x in range(40):
                 #print("Clearing GPIO-pin nr: " + str(x))
                 GPIO.setup(x, GPIO.OUT)
                 GPIO.output(x, GPIO.LOW)
         GPIO.cleanup()
+
+#Define controller for ctrl-c input
+def ctrl_c_handler(sig, frame):
+        print("Aborting program execution! Cleaning up GPIO pins...")
         print("Clean up done! Terminating...")
         quit_prog()
 
+def quit_prog():
+	sig.put("WHATEVER")
+	time.sleep(2)
+	quit()
+	
 signal.signal(signal.SIGINT, ctrl_c_handler)
 
 mot.reset_pos()
