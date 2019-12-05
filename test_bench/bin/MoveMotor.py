@@ -18,8 +18,8 @@ if(isinstance(args.distance, float) and isinstance(args.direction, int)):
 		lc = LoadCell.LoadCell()
 		while(args.distance > 0):
 			#Extract the current force applied from the load cell
-			curForce = lc.getNextForce()
-			if(isinstance(curForce, int)):
+			curForce = lc.getMeasurement()
+			if(isinstance(curForce, float)):
 		                #Check if the force exceeds maximum allowed value
 				if(curForce < Settings.MAX_FORCE):
 					mot.run_motor(float(1), args.direction)
@@ -27,6 +27,7 @@ if(isinstance(args.distance, float) and isinstance(args.direction, int)):
 				else:
 					mot.run_motor(10, 1)
 					print("ERROR: Maximum force value was exceeded!")
+					mot.cleanup()
 					quit()
 	else:
 		print("ERROR: Arguments not within valid range!")

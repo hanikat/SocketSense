@@ -13,10 +13,14 @@ def loadCell_loop(out_queue, term_sig):
 
 	#Initalize LoadCell class
 	lc = LoadCell.LoadCell()
+	f = open("log.txt", "a+")
 	while(True):
 		if(term_sig.empty()):
 			out_queue.put(lc.getMeasurement())
+			f.write("Gathered data from load cell...")
 		else:
+			f.write("Exiting thread 2...")
+			f.close
 			break
 
 #Class intilization
@@ -28,6 +32,13 @@ sig = Queue()
 _sentinel = object()
 t1 = Thread(target = loadCell_loop, args=(queue, sig, ))
 t1.start()
+
+def quit_prog():
+	sig.put("WHATEVER")
+	time.sleep(1)
+	quit()
+
+
 #Define controller for ctrl-c input
 def ctrl_c_handler(sig, frame):
         print("Aborting program execution! Cleaning up GPIO pins...")
@@ -38,8 +49,7 @@ def ctrl_c_handler(sig, frame):
                 GPIO.output(x, GPIO.LOW)
         GPIO.cleanup()
         print("Clean up done! Terminating...")
-        sig.put(_sentinel)
-        quit()
+        quit_prog()
 
 signal.signal(signal.SIGINT, ctrl_c_handler)
 
@@ -81,7 +91,7 @@ while(True):
 				#Targeted force is bigger and we are extending LA
 				if(curMovement + Settings.STEP_SIZE >= Settings.MAX_MOV):
 					print("ERROR(Main:3): The maximum movement length of the motor was reached!") 
-					quit()
+					quit_prog()
 				else:
 					#Maximum movement range have not yet been reached
 					curMovement += Settings.STEP_SIZE
@@ -112,9 +122,9 @@ while(True):
 					print("The targeted force was reached! Next force target is: " + str(force) + ", moving in direction:" + str(direction))
 		else:
 			print("ERROR(Main:1): The maximum force value was exceeded!")
-			quit()
+			quit_prog()
 	else:
 		print("ERROR(Main:2): The force returned was not an integer value! " + str(force) + ", " + str(curForce))
 		if(not isinstance(curForce, float)):
 			print("Jupp")
-		quit()
+		quit_prog()

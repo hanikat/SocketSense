@@ -12,7 +12,7 @@ DEBUG = True
 FORCE_VALUE_FILE = ROOT_DIR + "/data/force_values.csv"
 
 #Define maximum allowed force
-MAX_FORCE = 1000
+MAX_FORCE = 10
 
 
 # ----- MOTOR -----

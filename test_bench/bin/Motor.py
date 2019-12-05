@@ -18,6 +18,9 @@ class Motor:
 		if(Settings.DEBUG):
 			print("Motor class intialized!")
 
+	def cleanup():
+		self.motor.cleanup()
+
 	#Method used to move the motor a set distance (mm) and direction
 	#When direction = 0 the motor will extend, when direction = 1 the motor will retract
 	def run_motor(self, distance, dir):

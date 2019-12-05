@@ -46,14 +46,15 @@ class LoadCell:
 	def getMeasurement(self):
 		#Get current meassurement from load cell
 		curMeas = (self.hx711.get_data_mean(readings=Settings.LC_READINGS_PER_MEASSUREMENT)/Settings.LC_N_RATIO)
-		print("CurMeas: " + str(curMeas))
+		if(Settings.DEBUG):
+			print("CurMeas: " + str(curMeas))
 
 		#Check if the values of the current meassurement are valid and within range, stop the program if errorCount is exceeded
 		if(float(curMeas) == float(0) and self.errorCount < Settings.ALLOWED_ERROR_COUNT):
 			#Current meassurement is zero, increment error count
 			self.errorCount	+= 1
 			return float(self.lastMeas)
-		elif((float(curMeas - self.lastMeas) > float(Settings.ALLOWED_FORCE_DIF) or float(curMeas - self.lastMeas) > float(0) - float(Settings.ALLOWED_FORCE_DIF)) and self.errorCount < Settings.ALLOWED_ERROR_COUNT):
+		elif((float(curMeas - self.lastMeas) > float(Settings.ALLOWED_FORCE_DIF) or float(curMeas - self.lastMeas) > float(0) - float(Settings.ALLOWED_FORCE_DIF)) and self.errorCount > Settings.ALLOWED_ERROR_COUNT):
 			#Current meassurement is out of range, increment error count
 			self.errorCount += 1
 			return float(self.lastMeas)

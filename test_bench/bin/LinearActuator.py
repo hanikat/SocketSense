@@ -29,6 +29,9 @@ class LinearActuator:
 		#Disable motor until we need to use it
 		GPIO.output(Settings.MOTOR_EN_PIN, False)
 
+	def cleanup():
+		GPIO.cleanup()
+
 	#Method used to move motor "distance" number of mm
 	#dir is used to controll the direction of the linear actuator, 0 = extend, 1 = retract
 	def run_motor(self, distance, dir):
