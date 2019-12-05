@@ -21,7 +21,7 @@ class Forces:
 
 		if(len(self.force_values) <= 0):
 			print("ERROR(forces.load_csv:1): Error reading values from file, or file was empty!")
-			quit()
+			Settings.quit_prog()
 
         #Method used to load data from txt file into the force_values variable
 	def load_txt(self, path_to_file):
