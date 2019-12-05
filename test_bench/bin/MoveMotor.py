@@ -25,13 +25,7 @@ def ctrl_c_handler(sig, frame):
         print("Aborting program execution! Cleaning up GPIO pins...")
 	#clear_gpio()
         print("Clean up done! Terminating...")
-        quit_prog()
-
-def quit_prog():
-	clear_gpio()
-	sig.put("WHATEVER")
-	time.sleep(2)
-	quit()
+        Settings.quit_prog()
 	
 signal.signal(signal.SIGINT, ctrl_c_handler)
 
@@ -54,9 +48,9 @@ if(isinstance(args.distance, float) and isinstance(args.direction, int)):
 					mot.run_motor(10, 1)
 					print("ERROR: Maximum force value was exceeded!")
 					mot.cleanup()
-					quit_prog()
+					Settings.quit_prog()
 	else:
 		print("ERROR: Arguments not within valid range!")
 else:
 	print("ERROR: Invalid argument type(s)!")
-	quit_prog()
+	Settings.quit_prog()
