@@ -73,4 +73,4 @@ class Forces:
 					print("Lodaded " + str(len(self.force_values)) + " force values from file: " + path_to_file)
 			else:
                                 print("ERROR(Forces.load_forces:2): Could not find the file path!")
-                                quit()
+                                Settings.quit_prog()
