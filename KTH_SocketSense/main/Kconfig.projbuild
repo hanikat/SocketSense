@@ -1,0 +1,100 @@
+# put here your custom config value
+menu "KTH SocketSense Configuration"
+
+#choice
+#	prompt "Development Board"
+#	default BOARD_WROVER_KIT
+#	help
+#	  Specify the development board used.
+#
+#config BOARD_WROVER_KIT
+#	bool
+#	prompt "Espressiv Wrover Kit 4.1"
+#
+#config BOARD_ADAFRUIT_FEATHER
+#	bool
+#	prompt "Adafruit HUZAH32 - ESP32 Feather"
+#	
+#endchoice
+
+
+
+menu "WiFi Configuration"
+config ESP_WIFI_SSID
+    string "WiFi SSID"
+    default "myssid"
+    help
+	SSID (network name) for the example to connect to.
+
+config ESP_WIFI_PASSWORD
+    string "WiFi Password"
+    default "mypassword"
+    help
+	WiFi password (WPA or WPA2) for the example to use.
+endmenu
+
+menu "InfluxDB"	
+config INFLUXDB_IP
+	string "IP address of the InfluxDB server"
+	default "192.168.1.221"
+	help
+	The IP address of the computer that runs InfluxDB.
+	
+config INFLUXDB_PORT
+	int "Port number to reach InfluxDB"
+	default 8086
+	help
+	The port to reach InfluxDB.
+	
+config INFLUXDB_USERNAME
+	string "Username for InfluxDB user"
+	default "esp32"
+	help
+	This is the username that is used to authenticate when writing to the database
+
+config INFLUXDB_PASSWORD
+	string "Password for InfluxDB user"
+	default "temppwd"
+	help
+	This is the password that has been configured for the user in the database
+	
+endmenu
+
+menu "Sensor Configuration"
+config SOCKETSENSE_SENSOR_COUNT
+	int "Number of connected sensor strips (1 to 4)"
+	range 1 4
+	default 1
+	help
+	Specify the number of sensor strips that are connected to the device.
+
+config SOCKETSENSE_SENSEL_COUNT
+	int "Number of sensor elements on each sensor strip (1 to 8)"
+	range 1 16
+	default 10
+	help
+	Specify the number of sensor elements of the connected sensor strips.
+	
+config SOCKETSENSE_SENSOR_ACTIVE
+	int "Enable Socket Sensor Strips"
+	range 0 1
+	default 0
+	help
+	This is used to activate and deactivate the socket sensor strips
+
+config BME280_SENSOR_ACTIVE
+	int "Enable BME280"
+	range 0 1
+	default 0
+	help
+	This is used to activate and deactivate the socket sensor strips
+
+config GAIT_SENSOR_ACTIVE
+	int "Enable Gait Sensor"
+	range 0 1
+	default 0
+	help
+	This is used to activate and deactivate the socket sensor strips
+endmenu
+
+endmenu
