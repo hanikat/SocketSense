@@ -54,7 +54,7 @@ class Forces:
 	def load_forces(self, path_to_file):
 		if(not isinstance(path_to_file, str)):
 			print("ERROR(Forces.load_forces:1): Wrong type of argument supplied!")
-			quit()
+			Settings.quit_prog()
 		else:
 			#Check if the path to the supplied file exists
 			if(os.path.exists(path_to_file)):
