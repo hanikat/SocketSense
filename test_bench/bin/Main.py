@@ -48,6 +48,7 @@ def ctrl_c_handler(sig, frame):
         quit_prog()
 
 def quit_prog():
+	clear_gpio()
 	sig.put("WHATEVER")
 	time.sleep(2)
 	quit()
