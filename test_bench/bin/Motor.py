@@ -26,7 +26,7 @@ class Motor:
 	def run_motor(self, distance, dir):
 		if(not isinstance(float(distance),float) or not isinstance(dir, int)):
 			print("ERROR(Motor.run_motor:1): Wrong type of argument supplied!")
-			#quit()
+			Settings.quit_prog()
 		else:
 			if(Settings.MOTOR == "LINEAR"):
 				self.motor.run_motor(distance, dir)
