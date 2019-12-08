@@ -28,7 +28,8 @@ class LinearActuator:
 		GPIO.setup(Settings.MOTOR_EN_PIN, GPIO.OUT)
 		#Disable motor until we need to use it
 		GPIO.output(Settings.MOTOR_EN_PIN, False)
-		self.pwm = GPIO.PWM(self.MOTOR_IN_1, self.frequency)
+		if(Settings.PWM_MOTOR):
+			self.pwm = GPIO.PWM(self.MOTOR_IN_1, self.frequency)
 
 	def cleanup():
 		GPIO.cleanup()
