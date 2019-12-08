@@ -22,6 +22,9 @@ MAX_FORCE = 10
 #LINEAR
 MOTOR = 'LINEAR'
 
+#Define if the motor is to be controlled by PWM or not
+PWM_MOTOR = True
+
 #Define start position of motor (mm)
 START_POS = 50
 #Define maximum position of motor (mm)
