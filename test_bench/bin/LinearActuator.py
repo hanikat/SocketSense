@@ -10,7 +10,7 @@ class LinearActuator:
 
 	#Linear actuator specific variables, maybe move these to Settings.py?
 	direction = 0
-	frequency = 20000
+	frequency = 5000
 	duty_cycle = 25
 	#Number of seconds to run per mm of movement
 	s_mm = 1/5
