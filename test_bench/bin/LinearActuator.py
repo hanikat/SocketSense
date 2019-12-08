@@ -49,6 +49,7 @@ class LinearActuator:
 			distance = (distance / self.retract_correction);
 		
 		if(Settings.PWM_MOTOR):
+			GPIO.output(self.MOTOR_EN_PIN, dir)
 			self.pwm.start(self.duty_cycle)
 			time.sleep(distance * self.s_mm)
 			self.pwm.stop()
