@@ -35,7 +35,7 @@ class Motor:
 
 	#Reset motor position to Settings.START_POS value
 	def reset_pos(self):
-		self.motor.reset_pos()
-		self.motor.run_motor(self.position, 0)
+		#self.motor.reset_pos()
+		self.motor.run_motor(self.position, 1)
 		if(Settings.DEBUG):
-			print("Motor position was reset to: " + str(self.position))
+			print("Motor position was reset to: -" + str(self.position))

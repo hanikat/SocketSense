@@ -33,13 +33,6 @@ _sentinel = object()
 t1 = Thread(target = loadCell_loop, args=(queue, sig, ))
 t1.start()
 
-def clear_gpio():
-	GPIO.setmode(GPIO.BCM)
-        for x in range(40):
-                #print("Clearing GPIO-pin nr: " + str(x))
-                GPIO.setup(x, GPIO.OUT)
-                GPIO.output(x, GPIO.LOW)
-        GPIO.cleanup()
 
 #Define controller for ctrl-c input
 def ctrl_c_handler(sig, frame):
@@ -48,11 +41,11 @@ def ctrl_c_handler(sig, frame):
         quit_prog()
 
 def quit_prog():
-	clear_gpio()
 	sig.put("WHATEVER")
+	Settings.quit_prog()
 	time.sleep(2)
 	quit()
-	
+
 signal.signal(signal.SIGINT, ctrl_c_handler)
 
 mot.reset_pos()
@@ -63,6 +56,12 @@ startTime = time.time()
 force = forces.getNextForce()
 direction = 0
 lastForce = 0.0
+
+print("Waiting for load cell initlization...")
+while(queue.empty()):
+	time.sleep(1/100)
+print("Load cell initialized!")
+
 
 while(True):
 
@@ -111,9 +110,9 @@ while(True):
 				time.sleep(1/8)
 
 				#Sleep motor if duty cycle threshold have been reached
-				if(time.time() - startTime >= Settings.MOTORDUTY_CYCLE_TIME):
-					startTime = time.time()
-					time.sleep(Settings.MOTOR_DUTY_CYCLE_TIME/Settings.MOTOR_DUTY_CYCLE)
+				#if(time.time() - startTime >= Settings.MOTOR_DUTY_CYCLE_TIME):
+				#	startTime = time.time()
+				#	time.sleep(Settings.MOTOR_DUTY_CYCLE_TIME/Settings.MOTOR_DUTY_CYCLE)
 
 				#Set new direciton of motor
 				if(force > curForce):

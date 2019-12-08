@@ -12,21 +12,13 @@ args = parser.parse_args()
 print("Distance: " + str(args.distance) + ", Direction: " + str(args.direction))
 
 
-def clear_gpio():
-	GPIO.setmode(GPIO.BCM)
-        for x in range(40):
-                #print("Clearing GPIO-pin nr: " + str(x))
-                GPIO.setup(x, GPIO.OUT)
-                GPIO.output(x, GPIO.LOW)
-        GPIO.cleanup()
 
 #Define controller for ctrl-c input
 def ctrl_c_handler(sig, frame):
         print("Aborting program execution! Cleaning up GPIO pins...")
-	#clear_gpio()
         print("Clean up done! Terminating...")
         Settings.quit_prog()
-	
+
 signal.signal(signal.SIGINT, ctrl_c_handler)
 
 

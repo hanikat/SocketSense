@@ -10,8 +10,8 @@ class LinearActuator:
 
 	#Linear actuator specific variables, maybe move these to Settings.py?
 	direction = 0
-	frequency = 5000
-	duty_cycle = 25
+	frequency = 20000
+	duty_cycle = 100
 	#Number of seconds to run per mm of movement
 	s_mm = 1/5
 	retract_correction = 0.9271
@@ -29,10 +29,10 @@ class LinearActuator:
 		#Disable motor until we need to use it
 		GPIO.output(Settings.MOTOR_EN_PIN, False)
 		if(Settings.PWM_MOTOR):
-			self.pwm = GPIO.PWM(self.MOTOR_IN_1, self.frequency)
+			self.pwm = GPIO.PWM(Settings.MOTOR_IN_1, self.frequency)
 
 	def cleanup():
-		GPIO.cleanup()
+		Settings.quit_prog()
 
 	#Method used to move motor "distance" number of mm
 	#dir is used to controll the direction of the linear actuator, 0 = extend, 1 = retract
@@ -47,9 +47,9 @@ class LinearActuator:
 			print("ERROR(LinearActuator.run_motor:2): Invalid movement distance supplied as argument: " + str(distance))
 		if(dir == 1):
 			distance = (distance / self.retract_correction);
-		
+
 		if(Settings.PWM_MOTOR):
-			GPIO.output(self.MOTOR_EN_PIN, dir)
+			GPIO.output(Settings.MOTOR_EN_PIN, dir)
 			self.pwm.start(self.duty_cycle)
 			time.sleep(distance * self.s_mm)
 			self.pwm.stop()
@@ -66,7 +66,7 @@ class LinearActuator:
 			GPIO.output(Settings.MOTOR_IN_1, 0)
 			GPIO.output(Settings.MOTOR_IN_2, 0)
 			GPIO.output(Settings.MOTOR_EN_PIN, False)
-		
+
 		if(Settings.DEBUG):
 			print("Motor was moved " + str(distance) + " mm")
 

@@ -21,7 +21,7 @@ class LoadCell:
 		self.hx711 = HX711(dout_pin=Settings.LC_DOUT_PIN, pd_sck_pin=Settings.LC_PD_SCK_PIN, select_channel=Settings.LC_CHANNEL, gain_channel_A=Settings.LC_GAIN)
 		#Reset and zero(tare) the loadcell output
 		self.hx711.reset()
-		self.hx711.zero(readings=99)
+		self.hx711.zero(readings=Settings.LOAD_CELL_ZERO_MEASUREMENTS)
 
 	#Method to get the next force value within the list
 	def getNextForce(self):
@@ -46,21 +46,35 @@ class LoadCell:
 	def getMeasurement(self):
 		#Get current meassurement from load cell
 		curMeas = (self.hx711.get_data_mean(readings=Settings.LC_READINGS_PER_MEASSUREMENT)/Settings.LC_N_RATIO)
-		if(Settings.DEBUG):
-			print("CurMeas: " + str(curMeas))
+		#if(Settings.DEBUG):
+		#	print("CurMeas: " + str(curMeas))
 
 		#Check if the values of the current meassurement are valid and within range, stop the program if errorCount is exceeded
 		if(float(curMeas) == float(0) and self.errorCount < Settings.ALLOWED_ERROR_COUNT):
 			#Current meassurement is zero, increment error count
 			self.errorCount	+= 1
 			return float(self.lastMeas)
-		elif((float(curMeas - self.lastMeas) > float(Settings.ALLOWED_FORCE_DIF) or float(curMeas - self.lastMeas) > float(0) - float(Settings.ALLOWED_FORCE_DIF)) and self.errorCount > Settings.ALLOWED_ERROR_COUNT):
+		elif(float(curMeas - self.lastMeas) > float(Settings.ALLOWED_FORCE_DIF)):
+			print("PROBLEM1!")
+			if(self.errorCount < Settings.ALLOWED_ERROR_COUNT):
+				self.errorCount += 1
+				return float(self.lastMeas)
+			else:
+				Settings.quit_prog()
+		elif(float(curMeas - self.lastMeas) < (float(0) - float(Settings.ALLOWED_FORCE_DIF))):
+			print(str(float(curMeas - self.lastMeas)))
+			print(str(float(0) - float(Settings.ALLOWED_FORCE_DIF)))
+			print("PROBLEM!")
 			#Current meassurement is out of range, increment error count
-			self.errorCount += 1
-			return float(self.lastMeas)
+			if(self.errorCount < Settings.ALLOWED_ERROR_COUNT):
+				self.errorCount += 1
+				return float(self.lastMeas)
+			else:
+				Settings.quit_prog()
 		elif(self.errorCount >= Settings.ALLOWED_ERROR_COUNT):
 			#Error count threshold have been reached, terminate program
 			#os.kill(self.pid, signal.SIGINT)
+			Settings.quit_prog()
 			return float(-1)
 		else:
 			#Normal meassurement was recorded, reset errorCount
