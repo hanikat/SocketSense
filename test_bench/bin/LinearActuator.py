@@ -11,7 +11,7 @@ class LinearActuator:
 	#Linear actuator specific variables, maybe move these to Settings.py?
 	direction = 0
 	frequency = 20000
-	duty_cycle = 100
+	duty_cycle = 25
 	#Number of seconds to run per mm of movement
 	s_mm = 1/5
 	retract_correction = 0.9271
@@ -28,6 +28,7 @@ class LinearActuator:
 		GPIO.setup(Settings.MOTOR_EN_PIN, GPIO.OUT)
 		#Disable motor until we need to use it
 		GPIO.output(Settings.MOTOR_EN_PIN, False)
+		self.pwm = GPIO.PWM(self.MOTOR_IN_1, self.frequency)
 
 	def cleanup():
 		GPIO.cleanup()
@@ -46,18 +47,23 @@ class LinearActuator:
 		if(dir == 1):
 			distance = (distance / self.retract_correction);
 		
-		#Enable motor and start moving it
-		GPIO.output(Settings.MOTOR_EN_PIN, True)
-		GPIO.output(Settings.MOTOR_IN_1, dir)
-		GPIO.output(Settings.MOTOR_IN_2, not dir)
-		
-		#Wait until motor has moved the given distance
-		time.sleep(distance * self.s_mm)
-		
-		#Disable motor and stop moving it
-		GPIO.output(Settings.MOTOR_IN_1, 0)
-		GPIO.output(Settings.MOTOR_IN_2, 0)
-		GPIO.output(Settings.MOTOR_EN_PIN, False)
+		if(Settings.PWM_MOTOR):
+			self.pwm.start(self.duty_cycle)
+			time.sleep(distance * self.s_mm)
+			self.pwm.stop()
+		else:
+			#Enable motor and start moving it
+			GPIO.output(Settings.MOTOR_EN_PIN, True)
+			GPIO.output(Settings.MOTOR_IN_1, dir)
+			GPIO.output(Settings.MOTOR_IN_2, not dir)
+
+			#Wait until motor has moved the given distance
+			time.sleep(distance * self.s_mm)
+
+			#Disable motor and stop moving it
+			GPIO.output(Settings.MOTOR_IN_1, 0)
+			GPIO.output(Settings.MOTOR_IN_2, 0)
+			GPIO.output(Settings.MOTOR_EN_PIN, False)
 		
 		if(Settings.DEBUG):
 			print("Motor was moved " + str(distance) + " mm")
