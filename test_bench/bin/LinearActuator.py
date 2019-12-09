@@ -67,8 +67,8 @@ class LinearActuator:
 			GPIO.output(Settings.MOTOR_IN_2, 0)
 			GPIO.output(Settings.MOTOR_EN_PIN, False)
 
-		if(Settings.DEBUG):
-			print("Motor was moved " + str(distance) + " mm")
+		#if(Settings.DEBUG):
+		#	print("Motor was moved " + str(distance) + " mm")
 
 	#Reset motor position to 0
 	def reset_pos(self):

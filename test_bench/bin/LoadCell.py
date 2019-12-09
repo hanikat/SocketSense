@@ -55,7 +55,6 @@ class LoadCell:
 			self.errorCount	+= 1
 			return float(self.lastMeas)
 		elif(float(curMeas - self.lastMeas) > float(Settings.ALLOWED_FORCE_DIF)):
-			print("PROBLEM1!")
 			if(self.errorCount < Settings.ALLOWED_ERROR_COUNT):
 				self.errorCount += 1
 				return float(self.lastMeas)
@@ -64,7 +63,6 @@ class LoadCell:
 		elif(float(curMeas - self.lastMeas) < (float(0) - float(Settings.ALLOWED_FORCE_DIF))):
 			print(str(float(curMeas - self.lastMeas)))
 			print(str(float(0) - float(Settings.ALLOWED_FORCE_DIF)))
-			print("PROBLEM!")
 			#Current meassurement is out of range, increment error count
 			if(self.errorCount < Settings.ALLOWED_ERROR_COUNT):
 				self.errorCount += 1
@@ -73,7 +71,8 @@ class LoadCell:
 				Settings.quit_prog()
 		elif(self.errorCount >= Settings.ALLOWED_ERROR_COUNT):
 			#Error count threshold have been reached, terminate program
-			#os.kill(self.pid, signal.SIGINT)
+			if(Settings.DEBUG):
+				print("Got " + str(Settings.ALLOWED_ERROR_COUNT) + "wrong values from the load cell, terminating program")
 			Settings.quit_prog()
 			return float(-1)
 		else:

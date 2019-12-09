@@ -73,13 +73,13 @@ while(True):
 	if(not queue.empty()):
 		#Extract the current force applied from the load cell
 		curForce = queue.get()
+		if(Settings.DEBUG):
+			print("Current force value is: " + str(curForce))
 	else:
 		curForce = lastForce
 
 	#Set lastForce to be equivalent to the current force, to be used in the next loop
 	lastForce = curForce
-	if(Settings.DEBUG):
-		print("Current force value is: " + str(curForce))
 
 	if(isinstance(curForce, float) and isinstance(force, int)):
 
