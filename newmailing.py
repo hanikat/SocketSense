@@ -9,10 +9,10 @@ def is_interface_up(interface):
 time.sleep(60)
 server=smtplib.SMTP('smtp.gmail.com',587)
 server.starttls()
-server.login("marcushanikat@gmail.com", "qmaorflzjvwrpmbm")
+server.login("", "")
 ni.ifaddresses("wlan0")
 msg="Subject:Raspberry Online!\n\nHello from Raspberry Pi! You find me at: wlan0: " + ni.ifaddresses("wlan0")[ni.AF_INET][0]['addr']
 if(is_interface_up("eth0")):
 	msg = msg + ", eth0: " + ni.ifaddresses("eth0")[ni.AF_INET][0]['addr']
-server.sendmail("marcushanikat@gmail.com","macan95@hotmail.com",msg)
+server.sendmail("","",msg)
 server.quit()
